@@ -7,7 +7,7 @@ Authors: Joel Burton, Christian Fernandez, Meggie Mahnken, Katie Byers.
 """
 
 
-from flask import Flask, render_template, redirect, flash
+from flask import Flask, render_template, redirect, flash, session
 import jinja2
 
 import melons
@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 # A secret key is needed to use Flask sessioning features
 
-app.secret_key = 'this-should-be-something-unguessable'
+app.secret_key = 'balloonicorndaunicorn'
 
 # Normally, if you refer to an undefined variable in a Jinja template,
 # Jinja silently ignores this. This makes debugging difficult, so we'll
@@ -27,9 +27,14 @@ app.secret_key = 'this-should-be-something-unguessable'
 app.jinja_env.undefined = jinja2.StrictUndefined
 
 
+session = {}
+
+
+
 @app.route("/")
 def index():
     """Return homepage."""
+
 
     return render_template("homepage.html")
 
@@ -81,6 +86,7 @@ def show_shopping_cart():
     return render_template("cart.html")
 
 
+
 @app.route("/add_to_cart/<melon_id>")
 def add_to_cart(melon_id):
     """Add a melon to cart and redirect to shopping cart page.
@@ -88,6 +94,25 @@ def add_to_cart(melon_id):
     When a melon is added to the cart, redirect browser to the shopping cart
     page and display a confirmation message: 'Melon successfully added to
     cart'."""
+
+    # check if melon_id in cart, if so, increment by 1
+    # Otherwise, put in cart and add 1
+    session["cart"] = session.get("cart", {})
+    session["cart"][melon_id] = session["cart"].get(melon_id, 0) + 1
+
+    # flash a message indicating melon successfully added/incremented
+    flash("Successfully added {} to the cart.".format(melon_id))
+
+
+
+
+    # .get will shorten this:
+    # if melon_id in cart_dictionary:
+    #     cart_dictionary[melon_id] += 1
+    # else:
+    #     cart_dictionary[melon_id] = 1
+
+
 
     # TODO: Finish shopping cart functionality
 
@@ -100,7 +125,7 @@ def add_to_cart(melon_id):
     # - flash a success message
     # - redirect the user to the cart page
 
-    return "Oops! This needs to be implemented!"
+    return render_template("cart.html")
 
 
 @app.route("/login", methods=["GET"])
