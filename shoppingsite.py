@@ -95,14 +95,15 @@ def add_to_cart(melon_id):
     page and display a confirmation message: 'Melon successfully added to
     cart'."""
 
+    melon = melons.get_by_id(melon_id)
+
     # check if melon_id in cart, if so, increment by 1
     # Otherwise, put in cart and add 1
     session["cart"] = session.get("cart", {})
     session["cart"][melon_id] = session["cart"].get(melon_id, 0) + 1
 
     # flash a message indicating melon successfully added/incremented
-    flash("Successfully added {} to the cart.".format(melon_id))
-
+    flash("Successfully added {} to the cart.".format(melon.common_name))
 
 
 
@@ -125,7 +126,7 @@ def add_to_cart(melon_id):
     # - flash a success message
     # - redirect the user to the cart page
 
-    return render_template("cart.html")
+    return redirect("/cart")
 
 
 @app.route("/login", methods=["GET"])
