@@ -3,7 +3,7 @@
 
 {% block body %}
 
-    <table class="table table-striped">
+<!--     <table class="table table-striped">
         <thead>
         <tr>
             <th>Melon Name</th>
@@ -41,6 +41,30 @@
     </table>
 
     <h3>Total: $27.00</h3>
+ -->
+
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Melon Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for melon in cart %}    
+        <tr>
+            <td>{{ melon.common_name }}</td>
+            <td>{{ melon.qty }}</td>
+            <td>{{ melon.price }}</td>
+            <td>{{ melon.qty * melon.price }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+    <h3>Total: ${{ total_price }}</h3>
 
     <a href="/checkout" class="btn btn-large btn-primary">Check Out</a>
 
